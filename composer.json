@@ -46,7 +46,7 @@
         ],"post-install-cmd": [
             "@php artisan l5-swagger:generate",
             "@php artisan clear-compiled",
-            "chmod -R 777 storage", 
+            "chmod -R 777 storage"
         ]
     },
     "extra": {
