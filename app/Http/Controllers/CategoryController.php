@@ -8,78 +8,82 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+     * @OA\Get(
+     *      path="/api/category",
+     *      tags={"Category"},
+     *      summary="List categories",
+     *      description="<b>Returns the list of all categories.</b> <br> 
+                       Creation Date: 14/04/2021 08:20 PM <br> 
+                       Create By: Juan Cuero <br>
+                    Last Edit Date: 14/04/2021 08:20 PM <br> 
+            ",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
+    */
     public function index()
     {
-        //
+        $categories = Category::all();
+
+        return response()->json([
+            'status'=> 200, 
+            'categories'=> $categories,
+        ], 200);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+     * @OA\Post(
+     *      path="/api/category/{category}/changestatus",
+     *      tags={"Category"},
+     *      summary="Change status category",
+     *      description="<b>Change status categor.</b> <br> 
+                       Creation Date: 14/04/2021 06:00 PM <br> 
+                       Create By: Juan Cuero <br>
+                    Last Edit Date: 14/04/2021 06:00 PM <br> 
+    *        ",  
+     *        @OA\Parameter(
+     *          name="category",
+     *          description="category id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ), 
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
+    */
+    public function changeStatus(Request $request, Category $category)
     {
-        //
+        $category->active = !$category->active;
+        $category->save();
+
+        return response()->json([
+            'status'=> 200, 
+            'message'=> "Category updated successfully", 
+        ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Category $category)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Category $category)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Category $category)
-    {
-        //
-    }
+   
 }

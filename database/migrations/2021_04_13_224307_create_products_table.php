@@ -18,7 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->string('sku')->unique();
             $table->text('description');
-            $table->string('image');
+            $table->string('image')->default('/products/default.jpg');
             $table->unsignedBigInteger('stock')->default(0);
             $table->unsignedBigInteger('category_id');
             $table->decimal('price',10,2);

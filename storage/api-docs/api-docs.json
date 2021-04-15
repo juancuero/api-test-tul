@@ -88,6 +88,128 @@
                 }
             }
         },
+        "/api/cart/{product}/remove": {
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "remove product of the cart",
+                "description": "<b>Remover Producto de carrito.</b> <br> \n                       Creation Date: 14/04/2021 04:20 PM <br> \n                       Create By: Juan Cuero <br>\n                    Last Edit Date: 14/04/2021 04:20 PM <br> \n    *        ",
+                "operationId": "App\\Http\\Controllers\\CartController::remove",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "product id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "quantity": {
+                                        "title": "Quantity",
+                                        "type": "integer",
+                                        "example": 10
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/cart/pay": {
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Confirm cart",
+                "description": "<b>Confirm cart.</b> <br> \n     *                 Creation Date: 14/04/2021 05:20 PM <br> \n     *                 Create By: Juan Cuero <br>\n     *              Last Edit Date: 14/04/2021 05:20 PM <br> \n     *        ",
+                "operationId": "App\\Http\\Controllers\\CartController::pay",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/category": {
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "List categories",
+                "description": "<b>Returns the list of all categories.</b> <br> \n                       Creation Date: 14/04/2021 08:20 PM <br> \n                       Create By: Juan Cuero <br>\n                    Last Edit Date: 14/04/2021 08:20 PM <br> \n            ",
+                "operationId": "App\\Http\\Controllers\\CategoryController::index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/category/{category}/changestatus": {
+            "post": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Change status category",
+                "description": "<b>Change status categor.</b> <br> \n                       Creation Date: 14/04/2021 06:00 PM <br> \n                       Create By: Juan Cuero <br>\n                    Last Edit Date: 14/04/2021 06:00 PM <br> \n    *        ",
+                "operationId": "App\\Http\\Controllers\\CategoryController::changeStatus",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "description": "category id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
         "/api/products": {
             "get": {
                 "tags": [
@@ -107,10 +229,87 @@
                         "description": "Forbidden"
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Crear producto",
+                "description": "<b> Crea producto. </b> <br> \n      *                  Creation Date: 14/04/2021 07:00 PM<br> \n     *                   Create By: Juan Cuero <br>\n     *                   Last Edit Date: 14/04/2021 07:00 PM <br> \n    *       ",
+                "operationId": "App\\Http\\Controllers\\ProductController::store",
+                "requestBody": {
+                    "description": "Bulk products Body",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductCreate"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "These credentials do not match our records."
+                    }
+                }
             }
         }
     },
     "components": {
+        "schemas": {
+            "ProductCreate": {
+                "description": "<b> Register Product model</b> <br>",
+                "properties": {
+                    "name": {
+                        "title": "Name",
+                        "description": "Name of the product",
+                        "type": "string",
+                        "example": "Mi producto"
+                    },
+                    "description": {
+                        "title": "Description",
+                        "description": "Description of the product",
+                        "type": "string",
+                        "example": "Hola esta es mi primer producto"
+                    },
+                    "stock": {
+                        "title": "Stock",
+                        "description": "stock of the product",
+                        "type": "integer",
+                        "example": 20
+                    },
+                    "sku": {
+                        "title": "Sku",
+                        "description": "Sku of the product",
+                        "type": "string",
+                        "example": "REF123"
+                    },
+                    "price": {
+                        "title": "Price",
+                        "description": "price of the product",
+                        "type": "decimal",
+                        "example": 50000
+                    },
+                    "category_id": {
+                        "title": "Category",
+                        "description": "Category of the product",
+                        "type": "string",
+                        "example": 3
+                    },
+                    "image": {
+                        "title": "Image",
+                        "description": "Image of the product",
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            }
+        },
         "securitySchemes": {
             "apiAuth": {
                 "type": "http",
