@@ -85,7 +85,7 @@ class CartController extends Controller
     */
     public function store(Request $request, Product $product)
     {
-        
+        DB::beginTransaction();
         try {
 
             $data = $request->validate([
@@ -191,7 +191,7 @@ class CartController extends Controller
     */
     public function remove(Request $request, Product $product)
     {
-        
+        DB::beginTransaction();
         try {
             
             $item = Item::where('product_id', $product->id)->first();
@@ -264,7 +264,7 @@ class CartController extends Controller
     */
     public function pay(Request $request)
     {   
-        
+        DB::beginTransaction();
         try {
 
             $cart = Cart::where('status','P')->first();
