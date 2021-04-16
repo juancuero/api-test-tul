@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\v1;
 
 use Illuminate\Http\Request;
 use DB;
+use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Cart;
 use App\Models\Item;
@@ -12,7 +13,7 @@ class CartController extends Controller
 {
     /**
      * @OA\Get(
-     *      path="/api/cart",
+     *      path="/api/v1/cart/show",
      *      tags={"Cart"},
      *      summary="Show cart",
      *      description="<b>Returns the current cart.</b> <br> 
@@ -46,7 +47,7 @@ class CartController extends Controller
 
     /**
      * @OA\Post(
-     *      path="/api/cart/{product}",
+     *      path="/api/v1/cart/{product}/add",
      *      tags={"Cart"},
      *      summary="Add product to cart",
      *      description="<b>Agregar Producto a carrito.</b> <br> 
@@ -152,7 +153,7 @@ class CartController extends Controller
 
     /**
      * @OA\Post(
-     *      path="/api/cart/{product}/remove",
+     *      path="/api/v1/cart/{product}/remove",
      *      tags={"Cart"},
      *      summary="remove product of the cart",
      *      description="<b>Remover Producto de carrito.</b> <br> 
@@ -240,7 +241,7 @@ class CartController extends Controller
 
     /**
      * @OA\Post(
-     *      path="/api/cart/pay",
+     *      path="/api/v1/cart/confirm",
      *      tags={"Cart"},
      *      summary="Confirm cart",
      *      description="<b>Confirm cart.</b> <br> 
@@ -262,7 +263,7 @@ class CartController extends Controller
      *      )
      *     )
     */
-    public function pay(Request $request)
+    public function confirm(Request $request)
     {   
         DB::beginTransaction();
         try {

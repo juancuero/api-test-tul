@@ -19,14 +19,14 @@
         }
     ],
     "paths": {
-        "/api/cart": {
+        "/api/v1/cart/show": {
             "get": {
                 "tags": [
                     "Cart"
                 ],
                 "summary": "Show cart",
                 "description": "<b>Returns the current cart.</b> <br> \n                       Creation Date: 13/04/2021 05:30 PM <br> \n                       Create By: Juan Cuero <br>\n                    Last Edit Date: 13/04/2021 05:30 PM <br> \n            ",
-                "operationId": "App\\Http\\Controllers\\CartController::show",
+                "operationId": "App\\Http\\Controllers\\v1\\CartController::show",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -40,14 +40,14 @@
                 }
             }
         },
-        "/api/cart/{product}": {
+        "/api/v1/cart/{product}/add": {
             "post": {
                 "tags": [
                     "Cart"
                 ],
                 "summary": "Add product to cart",
                 "description": "<b>Agregar Producto a carrito.</b> <br> \n                       Creation Date: 13/04/2021 05:00 PM <br> \n                       Create By: Juan Cuero <br>\n                    Last Edit Date: 13/04/2021 05:00 PM <br> \n    *        ",
-                "operationId": "App\\Http\\Controllers\\CartController::store",
+                "operationId": "App\\Http\\Controllers\\v1\\CartController::store",
                 "parameters": [
                     {
                         "name": "product",
@@ -88,14 +88,14 @@
                 }
             }
         },
-        "/api/cart/{product}/remove": {
+        "/api/v1/cart/{product}/remove": {
             "post": {
                 "tags": [
                     "Cart"
                 ],
                 "summary": "remove product of the cart",
                 "description": "<b>Remover Producto de carrito.</b> <br> \n                       Creation Date: 14/04/2021 04:20 PM <br> \n                       Create By: Juan Cuero <br>\n                    Last Edit Date: 14/04/2021 04:20 PM <br> \n    *        ",
-                "operationId": "App\\Http\\Controllers\\CartController::remove",
+                "operationId": "App\\Http\\Controllers\\v1\\CartController::remove",
                 "parameters": [
                     {
                         "name": "product",
@@ -136,14 +136,14 @@
                 }
             }
         },
-        "/api/cart/pay": {
+        "/api/v1/cart/confirm": {
             "post": {
                 "tags": [
                     "Cart"
                 ],
                 "summary": "Confirm cart",
                 "description": "<b>Confirm cart.</b> <br> \n     *                 Creation Date: 14/04/2021 05:20 PM <br> \n     *                 Create By: Juan Cuero <br>\n     *              Last Edit Date: 14/04/2021 05:20 PM <br> \n     *        ",
-                "operationId": "App\\Http\\Controllers\\CartController::pay",
+                "operationId": "App\\Http\\Controllers\\v1\\CartController::confirm",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -157,14 +157,43 @@
                 }
             }
         },
-        "/api/category": {
+        "/api/v1/categories": {
             "get": {
                 "tags": [
                     "Category"
                 ],
                 "summary": "List categories",
-                "description": "<b>Returns the list of all categories.</b> <br> \n                       Creation Date: 14/04/2021 08:20 PM <br> \n                       Create By: Juan Cuero <br>\n                    Last Edit Date: 14/04/2021 08:20 PM <br> \n            ",
-                "operationId": "App\\Http\\Controllers\\CategoryController::index",
+                "description": "<b>Returns the list of all categories.</b> <br> \n                       Creation Date: 14/04/2021 08:20 PM <br> \n                       Create By: Juan Cuero <br>\n                    Last Edit Date: 15/04/2021 03:20 PM <br> \n            ",
+                "operationId": "App\\Http\\Controllers\\v1\\CategoryController::index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Category new",
+                "description": "<b>Create new category.</b> <br> \n                       Creation Date: 15/04/2021 03:45 PM <br> \n                       Create By: Juan Cuero <br>\n                    Last Edit Date: 15/04/2021 03:45 PM <br> \n    *        ",
+                "operationId": "App\\Http\\Controllers\\v1\\CategoryController::store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CategoryCreate"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -178,14 +207,14 @@
                 }
             }
         },
-        "/api/category/{category}/changestatus": {
+        "/api/v1/categories/{category}/changestatus": {
             "post": {
                 "tags": [
                     "Category"
                 ],
                 "summary": "Change status category",
                 "description": "<b>Change status categor.</b> <br> \n                       Creation Date: 14/04/2021 06:00 PM <br> \n                       Create By: Juan Cuero <br>\n                    Last Edit Date: 14/04/2021 06:00 PM <br> \n    *        ",
-                "operationId": "App\\Http\\Controllers\\CategoryController::changeStatus",
+                "operationId": "App\\Http\\Controllers\\v1\\CategoryController::changeStatus",
                 "parameters": [
                     {
                         "name": "category",
@@ -210,14 +239,14 @@
                 }
             }
         },
-        "/api/products": {
+        "/api/v1/products": {
             "get": {
                 "tags": [
                     "Products"
                 ],
                 "summary": "List Products",
                 "description": "<b>Returns the list of available products.</b> <br> \n                       Creation Date: 13/04/2021 04:00 PM <br> \n                       Create By: Juan Cuero <br>\n                    Last Edit Date: 13/04/2021 04:00 PM <br> \n            ",
-                "operationId": "App\\Http\\Controllers\\ProductController::index",
+                "operationId": "App\\Http\\Controllers\\v1\\ProductController::index",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -236,7 +265,7 @@
                 ],
                 "summary": "Crear producto",
                 "description": "<b> Crea producto. </b> <br> \n      *                  Creation Date: 14/04/2021 07:00 PM<br> \n     *                   Create By: Juan Cuero <br>\n     *                   Last Edit Date: 14/04/2021 07:00 PM <br> \n    *       ",
-                "operationId": "App\\Http\\Controllers\\ProductController::store",
+                "operationId": "App\\Http\\Controllers\\v1\\ProductController::store",
                 "requestBody": {
                     "description": "Bulk products Body",
                     "required": true,
@@ -261,6 +290,24 @@
     },
     "components": {
         "schemas": {
+            "CategoryCreate": {
+                "description": "<b> Register Category model</b> <br>",
+                "properties": {
+                    "name": {
+                        "title": "Name",
+                        "description": "Name of the category",
+                        "type": "string",
+                        "example": "Materiales de Construcción"
+                    },
+                    "parent_id": {
+                        "title": "Parent",
+                        "description": "Parent of the category",
+                        "type": "integer",
+                        "example": null
+                    }
+                },
+                "type": "object"
+            },
             "ProductCreate": {
                 "description": "<b> Register Product model</b> <br>",
                 "properties": {
@@ -282,12 +329,6 @@
                         "type": "integer",
                         "example": 20
                     },
-                    "sku": {
-                        "title": "Sku",
-                        "description": "Sku of the product",
-                        "type": "string",
-                        "example": "REF123"
-                    },
                     "price": {
                         "title": "Price",
                         "description": "price of the product",
@@ -297,7 +338,7 @@
                     "category_id": {
                         "title": "Category",
                         "description": "Category of the product",
-                        "type": "string",
+                        "type": "integer",
                         "example": 3
                     },
                     "image": {

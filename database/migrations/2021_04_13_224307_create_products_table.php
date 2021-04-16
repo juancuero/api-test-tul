@@ -20,15 +20,12 @@ class CreateProductsTable extends Migration
             $table->text('description');
             $table->string('image')->default('/products/default.jpg');
             $table->unsignedBigInteger('stock')->default(0);
-            $table->unsignedBigInteger('category_id');
+            $table->foreignId('category_id')->constrained();
             $table->decimal('price',10,2);
             $table->boolean('active')->default(true);
             $table->timestamps();
 
-            $table->foreign('category_id')
-                ->references('id')
-                ->on('categories')
-                ->onUpdate('cascade');
+           
         });
     }
 

@@ -27,7 +27,6 @@ class StoreProductRequest extends BaseFormRequest
         return [
             'name' => ['required', 'string', 'max:100'],
             'description' => ['required', 'string', 'max:300'], 
-            'sku' => ['required', 'string', 'max:100', 'unique:products,sku'],
             'stock' => ['numeric','min:0'],  
             'image' => ['nullable','image','mimes:jpeg,png,jpg,gif,svg','max:2048'],  
             'price' => ['numeric','min:0'], 

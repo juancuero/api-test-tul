@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\v1;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
 use DB;
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 
 
 class ProductController extends Controller
 {
     /**
      * @OA\Get(
-     *      path="/api/products",
+     *      path="/api/v1/products",
      *      tags={"Products"},
      *      summary="List Products",
      *      description="<b>Returns the list of available products.</b> <br> 
@@ -40,7 +42,7 @@ class ProductController extends Controller
 
         return response()->json([
             'status'=> 200, 
-            'products'=> $products,
+            'products'=> ProductResource::collection($products),
         ], 200);
     }
 
@@ -48,7 +50,7 @@ class ProductController extends Controller
 
     /**
      * @OA\Post(
-     *      path="/api/products",
+     *      path="/api/v1/products",
      *      tags={"Products"},
      *      summary="Crear producto",
      *      description="<b> Crea producto. </b> <br> 
@@ -76,20 +78,12 @@ class ProductController extends Controller
      */ 
     public function store(StoreProductRequest $request)
     {
-        DB::beginTransaction();
-        try{
+        $response = DB::transaction(function () use ($request) {
                  
-                $product = Product::create([
-                    'name' => $request->name,
-                    'description'  => $request->description,
-                    'stock'  => $request->stock,
-                    'price' => $request->price,
-                    'category_id' => $request->category_id,
-                    'sku' => $request->sku
-                ]);
+                $product = Product::create($request->all());
 
 
-                $dir = public_path("products");
+                $dir = public_path(IMAGE_PATH_NAME);
                 if( ! \File::isDirectory($dir) ) {
                     \File::makeDirectory($dir, 0777, true);
                 }
@@ -97,29 +91,22 @@ class ProductController extends Controller
                 if($request->file('image')){
                    $image = $request->file('image');
                         $filename  =  $product->id.'_'.time() . '.' . $image->getClientOriginalExtension();
-                        $path = '/products/'.$filename;
-                        $image->move(public_path('products'), $filename);
+                        $path = '/'.IMAGE_PATH_NAME.'/'.$filename;
+                        $image->move(public_path(IMAGE_PATH_NAME), $filename);
                         $product->image = $path;
                         $product->save();
                 }    
 
-                DB::commit();
-                
                 return response()->json([
-                    'status'=>200, 
-                    'product'=>$product, 
-                    'message'=> "Product ".$product->name.' created',  
+                    'status'=>200,  
+                    'product'=> new ProductResource($product), 
+                    'message'=> "Product ".$product->name.' successfully',  
                 ], 200);
                 
              
             
-        }catch (\Exception $ex){ 
-            error_log($ex->getMessage());
-            DB::rollBack();
-            return response()->json([
-                'status'=>500, 
-                'message'=> $ex->getMessage(),  
-            ], 500);
-        }      
+        });
+
+        return $response;   
     }
 }
