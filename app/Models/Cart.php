@@ -10,6 +10,8 @@ class Cart extends Model
 {
     use HasFactory;
 
+    public $error;
+
     protected $fillable = [
         'status',
     ];
@@ -18,12 +20,12 @@ class Cart extends Model
     
     public function items()
     {
-        return $this->hasMany(Item::class);
+        return $this->hasMany(CartProduct::class);
     }
-
+    
     public function getamountAttribute()
     {
-        $amount = Item::all()->sum(function($t){ 
+        $amount = CartProduct::all()->sum(function($t){ 
             return $t->price_unit * $t->quantity; 
         });
 

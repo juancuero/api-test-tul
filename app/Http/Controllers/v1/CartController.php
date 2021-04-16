@@ -7,7 +7,9 @@ use DB;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Cart;
-use App\Models\Item;
+use App\Models\CartProduct;
+
+use App\Http\Resources\CartResource; 
 
 class CartController extends Controller
 {
@@ -37,10 +39,21 @@ class CartController extends Controller
     */
     public function show()
     {
-        $cart = Cart::where('status','P')->with('items')->first(); 
+        
+
+        $cart = Cart::where('status',STATUS_PENDING)->with('items')->first(); 
+
+        if($cart){
+            return response()->json([
+                'status'=> 200, 
+                'cart'=> new CartResource($cart), 
+            ], 200);
+        }
+
         return response()->json([
             'status'=> 200, 
             'cart'=> $cart, 
+            'message'=> "There are no products in the cart.", 
         ], 200);
     }
 
@@ -86,22 +99,21 @@ class CartController extends Controller
     */
     public function store(Request $request, Product $product)
     {
-        DB::beginTransaction();
-        try {
+        $response = DB::transaction(function () use ($request,$product) {
 
             $data = $request->validate([
                 'quantity' => 'required|numeric'
             ]);   
 
 
-            $cart = Cart::where('status','P')->first();
+            $cart = Cart::where('status',STATUS_PENDING)->first();
 
             if(!$cart){
                 $cart =  new Cart();
                 $cart->save();
             }
 
-            $item = Item::where('cart_id',$cart->id)->where('product_id',$product->id)->first();
+            $item = CartProduct::where('cart_id',$cart->id)->where('product_id',$product->id)->first();
 
             if(!$item){
 
@@ -128,26 +140,17 @@ class CartController extends Controller
                 $item->save();
             }
 
-            DB::commit();
-
-            $cart = Cart::where('status','P')->with('items')->first(); 
+            $cart = $cart->fresh(); 
 
             return response()->json([
                 'status'=> 200, 
                 'message'=> "Product added successfully", 
-                'cart'=> $cart, 
+                'cart'=> new CartResource($cart), 
             ], 200);
 
-        }catch (\Exception $ex){ 
-            error_log($ex->getMessage());
-            DB::rollBack();
+        });
 
-            return response()->json([
-                'status'=> 500, 
-                'error'=>$ex->getMessage(),
-            ], 500);
-        }  
-
+        return $response;
        
     }
 
@@ -192,49 +195,51 @@ class CartController extends Controller
     */
     public function remove(Request $request, Product $product)
     {
-        DB::beginTransaction();
-        try {
-            
-            $item = Item::where('product_id', $product->id)->first();
+        $response = DB::transaction(function () use ($request,$product) {
 
-            if($item != null){ 
+            $cart = Cart::where('status',STATUS_PENDING)->first();
+            if($cart != null){ 
+                
+                $item = CartProduct::where('product_id', $product->id)->where('cart_id', $cart->id)->first(); 
 
-               $resta = $item->quantity - $request->quantity;
+                if($item != null){ 
+                $resta = $item->quantity - $request->quantity;
 
-               if($resta > 0){
-                    $item->quantity = $resta; 
-                    $item->save();
-               }else{
-                    $item->delete();
-               }
+                if($resta > 0){
+                        $item->quantity = $resta; 
+                        $item->save();
+                }else{
+                        $item->delete();
+                }
 
-               
-               DB::commit();
+                $cart = $cart->fresh(); 
 
-               return response()->json([
-                'status'=> 200, 
-                'message'=> "queantity removed successfully", 
-            ], 200);
+                return response()->json([
+                        'status'=> 200, 
+                        'cart'=> new CartResource($cart), 
+                        'message'=> "Quantity removed successfully", 
+                    ], 200);
+                }    
+
+                
+                return response()->json([
+                    'status'=> 200, 
+                    'message'=> "Product no found in cart", 
+                ], 200);
 
 
             }
 
             return response()->json([
                 'status'=> 200, 
-                'message'=> "Product no found in cart", 
+                'message'=> "Cart no found", 
             ], 200);
            
 
-        }catch (\Exception $ex){ 
-            error_log($ex->getMessage());
-            DB::rollBack();
+        });
 
-            return response()->json([
-                'status'=> 500, 
-                'error'=>$ex->getMessage(),
-            ], 500);
-        }  
-
+        return $response;
+       
        
     }
 
@@ -265,61 +270,36 @@ class CartController extends Controller
     */
     public function confirm(Request $request)
     {   
-        DB::beginTransaction();
-        try {
+        $response = DB::transaction(function () use ($request) {
 
-            $cart = Cart::where('status','P')->first();
+            $cart = Cart::where('status',STATUS_PENDING)->first();
 
             if($cart){ 
                 
-                $cart->status = "T";
+                $cart->status = STATUS_TERMINATED;
+ 
 
-                foreach ($cart->items as $item) {
-
-                    if($item->quantity <= $item->product->stock){
-
-                        $item->product->stock = $item->product->stock - $item->quantity;
-                        $item->product->save();
-
-                    }else{
-                        DB::rollBack();
-                        return response()->json([
-                            'status'=> 200, 
-                            'message'=>"No stock product: ".$item->product->name, 
-                        ], 200);
-                    }
-                    
-                    $cart->save();
-                    DB::commit();
-
+                if($cart->save()){
                     return response()->json([
                         'status'=> 200, 
                         'message'=> "Successfully", 
                     ], 200);
                 }
-
-                
-
+              
                 return response()->json([
-                    'status'=> 200, 
-                    'message'=> "No products", 
+                    'status'=> 500, 
+                    'message'=> $cart["error"], 
                 ], 200);
+                             
             }
 
             return response()->json([
-                'status'=> 200, 
+                'status'=> 404, 
                 'message'=> "No found cart", 
             ], 200);
 
-        }catch (\Exception $ex){ 
-            error_log($ex->getMessage());
-            DB::rollBack();
-
-            return response()->json([
-                'status'=> 500, 
-                'error'=>$ex->getMessage(),
-            ], 500);
-        }  
+        });    
+        return $response;
 
        
     }

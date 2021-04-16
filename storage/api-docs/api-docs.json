@@ -286,6 +286,49 @@
                     }
                 }
             }
+        },
+        "/api/v1/products/{product}": {
+            "put": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Update existing product",
+                "description": "Returns updated product data",
+                "operationId": "App\\Http\\Controllers\\v1\\ProductController::update",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "product id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Bulk products Body",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductUpdate"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -346,6 +389,36 @@
                         "description": "Image of the product",
                         "type": "string",
                         "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "ProductUpdate": {
+                "description": "<b> Register Product model</b> <br>",
+                "properties": {
+                    "description": {
+                        "title": "Description",
+                        "description": "Description of the product",
+                        "type": "string",
+                        "example": "Hola esta es mi primer producto"
+                    },
+                    "stock": {
+                        "title": "Stock",
+                        "description": "stock of the product",
+                        "type": "integer",
+                        "example": 20
+                    },
+                    "price": {
+                        "title": "Price",
+                        "description": "price of the product",
+                        "type": "decimal",
+                        "example": 50000
+                    },
+                    "category_id": {
+                        "title": "Category",
+                        "description": "Category of the product",
+                        "type": "integer",
+                        "example": 3
                     }
                 },
                 "type": "object"

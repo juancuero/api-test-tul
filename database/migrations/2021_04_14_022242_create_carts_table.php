@@ -16,6 +16,7 @@ class CreateCartsTable extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->string('status')->default('P');
+            $table->decimal('total',10,2)->default(0);
             $table->timestamps();
         });
     }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model
+class CartProduct extends Model
 {
     use HasFactory;
 
@@ -25,13 +25,15 @@ class Item extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function cart()
+    {
+        return $this->belongsTo(Cart::class);
+    }
+
     public function gettotalAttribute()
     {
          return $this->price_unit * $this->quantity;
     }
 
-    public function items()
-    {
-        return $this->belongsTo(Item::class);
-    }
+     
 }

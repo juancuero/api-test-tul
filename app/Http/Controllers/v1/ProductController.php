@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use DB;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductResource; 
 
 
 class ProductController extends Controller
@@ -100,7 +100,7 @@ class ProductController extends Controller
                 return response()->json([
                     'status'=>200,  
                     'product'=> new ProductResource($product), 
-                    'message'=> "Product ".$product->name.' successfully',  
+                    'message'=> "Product ".$product->name.' created successfully',  
                 ], 200);
                 
              
@@ -109,4 +109,71 @@ class ProductController extends Controller
 
         return $response;   
     }
+
+    
+       /**
+     * @OA\Put(
+     *      path="/api/v1/products/{product}", 
+     *      tags={"Products"}, 
+     *         description="<b> Returns updated product data. </b> <br> 
+      *                  Creation Date: 16/04/2021 12:00 PM<br> 
+     *                   Create By: Juan Cuero <br>
+     *                   Last Edit Date: 16/04/2021 12:00 PM <br> 
+    *       ",
+     *      @OA\Parameter(
+     *          name="product",
+     *          description="product id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     * @OA\RequestBody( 
+    *   required=true,
+    *   description="Bulk products Body",
+    *   @OA\MediaType(
+    *     mediaType="application/x-www-form-urlencoded",
+    *     @OA\Schema(ref="#/components/schemas/ProductUpdate")
+    *   )
+    * ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
+     */
+    public function update(StoreProductRequest $request, Product $product)
+    {
+        
+
+        $response = DB::transaction(function () use ($request, $product) {
+                  
+            $product->fill($request->only(['name', 'description','stock','category_id','price']))->save();
+
+            return response()->json([
+                'status'=>200,  
+                'product'=> new ProductResource($product), 
+                'message'=> "Product ".$product->name.' successfully',  
+            ], 200);
+                
+             
+            
+        });
+
+        return $response;   
+    }
+
+
+
+
+
 }

@@ -71,3 +71,16 @@ class Product extends Model
     * @OA\Property(title="Image",property="image",description="Image of the product",format="binary",type="string"),
  * )
  */
+
+ /**
+ * @OA\Schema(
+ * schema="ProductUpdate",
+    * description="<b> Register Product model</b> <br>",
+    * @OA\Property(title="Name",property="name",description="Name of the product",type="string",example="Mi producto"),
+    * @OA\Property(title="Description",property="description",description="Description of the product",type="string",example="Hola esta es mi primer producto"), 
+    * @OA\Property(title="Stock",property="stock",description="stock of the product",type="integer",example=20), 
+    * @OA\Property(title="Price",property="price",description="price of the product",type="decimal",example=50000), 
+    * @OA\Property(title="Category",property="category_id",description="Category of the product",type="integer",example=3), 
+ * )
+ */
+

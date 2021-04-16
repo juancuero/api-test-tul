@@ -24,14 +24,29 @@ class StoreProductRequest extends BaseFormRequest
      */
     public function rules()
     {
-        return [
-            'name' => ['required', 'string', 'max:100'],
-            'description' => ['required', 'string', 'max:300'], 
-            'stock' => ['numeric','min:0'],  
-            'image' => ['nullable','image','mimes:jpeg,png,jpg,gif,svg','max:2048'],  
-            'price' => ['numeric','min:0'], 
-            'category_id' => ['required','exists:categories,id','subcategory'], 
-        ];
+        switch($this->method()) {
+
+            case 'POST':
+                return [
+                    'name' => ['required', 'string', 'max:100'],
+                    'description' => ['required', 'string', 'max:300'], 
+                    'stock' => ['numeric','min:0'],  
+                    'image' => ['nullable','image','mimes:jpeg,png,jpg,gif,svg','max:2048'],  
+                    'price' => ['numeric','min:0'], 
+                    'category_id' => ['required','exists:categories,id','subcategory'], 
+                ];
+
+            case 'PUT':
+                    return [
+                        'name' => ['string', 'max:100'],
+                        'description' => [ 'string', 'max:300'], 
+                        'stock' => ['numeric','min:0'],  
+                        'price' => ['numeric','min:0'], 
+                        'category_id' => ['exists:categories,id','subcategory'], 
+                    ];  
+
+            default:break;
+        }
     }
 
     public function withValidator($validator)

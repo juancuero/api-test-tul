@@ -3,6 +3,13 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Observers\ProductObserver; 
+use App\Observers\CartProductObserver; 
+use App\Observers\CartObserver; 
+use App\Models\Product;
+use App\Models\CartProduct;
+use App\Models\Cart;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Product::observe(ProductObserver::class); 
+        CartProduct::observe(CartProductObserver::class); 
+        Cart::observe(CartObserver::class); 
     }
 }

@@ -7,17 +7,8 @@ use App\Http\Controllers\v1\ProductController;
 use App\Http\Controllers\v1\CartController;
 use App\Http\Controllers\v1\CategoryController;
 
-Route::group([
-    'prefix' => 'products'
-], function () {
-
-
-    Route::get('/', [ProductController::class, 'index'])->name('products-index');  
-    Route::post('/', [ProductController::class, 'store'])->name('products-store');  
-    
-    
-
-});   
+ 
+Route::apiResource('products', ProductController::class);
 
 Route::group([
     'prefix' => 'cart'
