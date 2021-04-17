@@ -89,7 +89,7 @@
             }
         },
         "/api/v1/cart/{product}/remove": {
-            "post": {
+            "put": {
                 "tags": [
                     "Cart"
                 ],
@@ -208,7 +208,7 @@
             }
         },
         "/api/v1/categories/{category}/changestatus": {
-            "post": {
+            "put": {
                 "tags": [
                     "Category"
                 ],
@@ -292,6 +292,7 @@
                 "tags": [
                     "Products"
                 ],
+                "summary": "Actualizar producto",
                 "description": "<b> Returns updated product data. </b> <br> \n      *                  Creation Date: 16/04/2021 12:00 PM<br> \n     *                   Create By: Juan Cuero <br>\n     *                   Last Edit Date: 16/04/2021 12:00 PM <br> \n    *       ",
                 "operationId": "App\\Http\\Controllers\\v1\\ProductController::update",
                 "parameters": [

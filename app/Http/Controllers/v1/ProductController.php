@@ -115,6 +115,7 @@ class ProductController extends Controller
      * @OA\Put(
      *      path="/api/v1/products/{product}", 
      *      tags={"Products"}, 
+     *      summary="Actualizar producto",
      *         description="<b> Returns updated product data. </b> <br> 
       *                  Creation Date: 16/04/2021 12:00 PM<br> 
      *                   Create By: Juan Cuero <br>

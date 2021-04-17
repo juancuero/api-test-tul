@@ -89,7 +89,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * @OA\Post(
+     * @OA\Put(
      *      path="/api/v1/categories/{category}/changestatus",
      *      tags={"Category"},
      *      summary="Change status category",

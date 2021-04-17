@@ -155,7 +155,7 @@ class CartController extends Controller
     }
 
     /**
-     * @OA\Post(
+     * @OA\Put(
      *      path="/api/v1/cart/{product}/remove",
      *      tags={"Cart"},
      *      summary="remove product of the cart",
