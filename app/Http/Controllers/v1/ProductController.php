@@ -90,7 +90,7 @@ class ProductController extends Controller
 
                 if($request->file('image')){
                    $image = $request->file('image');
-                        $filename  =  $product->id.'_'.time() . '.' . $image->getClientOriginalExtension();
+                        $filename  =  $product->id. '.' . $image->getClientOriginalExtension();
                         $path = '/'.IMAGE_PATH_NAME.'/'.$filename;
                         $image->move(public_path(IMAGE_PATH_NAME), $filename);
                         $product->image = $path;
@@ -98,10 +98,10 @@ class ProductController extends Controller
                 }    
 
                 return response()->json([
-                    'status'=>200,  
+                    'status'=>201,  
                     'product'=> new ProductResource($product), 
                     'message'=> "Product ".$product->name.' created successfully',  
-                ], 200);
+                ], 201);
                 
              
             
@@ -129,14 +129,10 @@ class ProductController extends Controller
      *              type="integer"
      *          )
      *      ),
-     * @OA\RequestBody( 
-    *   required=true,
-    *   description="Bulk products Body",
-    *   @OA\MediaType(
-    *     mediaType="application/x-www-form-urlencoded",
-    *     @OA\Schema(ref="#/components/schemas/ProductUpdate")
-    *   )
-    * ),
+    *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/ProductUpdate")
+     *      ),
      *      @OA\Response(
      *          response=400,
      *          description="Bad Request"

@@ -292,8 +292,7 @@
                 "tags": [
                     "Products"
                 ],
-                "summary": "Update existing product",
-                "description": "Returns updated product data",
+                "description": "<b> Returns updated product data. </b> <br> \n      *                  Creation Date: 16/04/2021 12:00 PM<br> \n     *                   Create By: Juan Cuero <br>\n     *                   Last Edit Date: 16/04/2021 12:00 PM <br> \n    *       ",
                 "operationId": "App\\Http\\Controllers\\v1\\ProductController::update",
                 "parameters": [
                     {
@@ -307,10 +306,9 @@
                     }
                 ],
                 "requestBody": {
-                    "description": "Bulk products Body",
                     "required": true,
                     "content": {
-                        "application/x-www-form-urlencoded": {
+                        "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/ProductUpdate"
                             }
@@ -396,6 +394,12 @@
             "ProductUpdate": {
                 "description": "<b> Register Product model</b> <br>",
                 "properties": {
+                    "name": {
+                        "title": "Name",
+                        "description": "Name of the product",
+                        "type": "string",
+                        "example": "Mi producto"
+                    },
                     "description": {
                         "title": "Description",
                         "description": "Description of the product",

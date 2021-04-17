@@ -78,10 +78,10 @@ class CategoryController extends Controller
             $category = Category::create($request->all());
 
             return response()->json([
-                'status'=> 200, 
+                'status'=> 201, 
                 'category'=> new CategoryResource($category), 
                 'message'=> "Category ".$category->name." cretated successfully", 
-            ], 200);
+            ], 201);
 
         });
 
